@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulation de Frais Bancaires</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      margin: 0;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h1 {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    select, input, button {
+      width: 100%; /* Fixe la largeur à 100% pour tous les éléments */
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box; /* Garantit que padding et bordure n'augmentent pas la largeur totale */
+    }
+    .result {
+      margin-top: 20px;
+    }
+    .result p {
+      margin: 5px 0;
+    }
+    .tooltip {
+      font-size: 12px;
+      color: #007bff;
+      cursor: pointer;
+    }
+    #loading {
+      display: none;
+      text-align: center;
+      font-size: 18px;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Simulation de frais bancaires</h1>
+  
+  <select id="country">
+    <option value="">Sélectionnez un pays</option>
+    <option value="USA">USA</option>
+    <option value="UK">Royaume-Uni</option>
+    <option value="JP">Japon</option>
+    <option value="CA">Canada</option>
+    <option value="AU">Australie</option>
+    <option value="CH">Suisse</option>
+    <option value="IN">Inde</option>
+    <option value="BR">Brésil</option>
+    <option value="MX">Mexique</option>
+    <option value="ZA">Afrique du Sud</option>
+  </select>
+
+  <input type="number" id="amount" placeholder="Montant en €">
+
+  <button onclick="handleConvert()">Calculer</button>
+
+  <!-- Zone de chargement -->
+  <div id="loading">Calcul en cours...</div>
+
+  <!-- Zone des résultats -->
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+  const conversionRates = {
+    USA: 1.1,
+    UK: 0.85,
+    JP: 130.5,
+    CA: 1.45,
+    AU: 1.6,
+    CH: 0.98,
+    IN: 90.3,
+    BR: 5.2,
+    MX: 18.9,
+    ZA: 17.5
+  };
+
+  function handleConvert() {
+    const country = document.getElementById('country').value;
+    const amount = document.getElementById('amount').value;
+    const resultDiv = document.getElementById('result');
+    const loadingDiv = document.getElementById('loading');
+    
+    // Vérification des données
+    if (!country || !amount) return;
+
+    // Affichage du chargement
+    loadingDiv.style.display = 'block';
+    resultDiv.innerHTML = ''; // Réinitialiser les résultats
+
+    // Calcul des frais après un délai pour simuler le chargement
+    setTimeout(() => {
+      const conversionRate = conversionRates[country] || 1;
+      const fixedFee = 2.5;
+      const percentageFee = 0.02 * parseFloat(amount);
+      const totalFees = (fixedFee + percentageFee).toFixed(2);
+      const convertedAmount = (parseFloat(amount) * conversionRate - totalFees).toFixed(2);
+
+      // Masquer l'animation de chargement et afficher les résultats
+      loadingDiv.style.display = 'none';
+      resultDiv.innerHTML = `
+        <p><strong>Montant après conversion :</strong> ${convertedAmount} ${country}</p>
+        <p><strong>Taux de conversion appliqué :</strong> ${conversionRate} <span class="tooltip" title="Valeur actuelle du taux de change pour le pays sélectionné.">ℹ️</span></p>
+        <p><strong>Frais fixes :</strong> ${fixedFee}€ <span class="tooltip" title="Frais de transaction bancaires fixes appliqués.">ℹ️</span></p>
+        <p><strong>Frais en pourcentage :</strong> ${percentageFee.toFixed(2)}€ <span class="tooltip" title="Pourcentage des frais basés sur le montant converti.">ℹ️</span></p>
+        <p><strong>Total des frais :</strong> ${totalFees}€ <span class="tooltip" title="Somme des frais fixes et en pourcentage.">ℹ️</span></p>
+      `;
+    }, 1500); // Délai de 1.5 secondes pour simuler le calcul
+  }
+</script>
+
+</body>
+</html>
