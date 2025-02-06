@@ -2,9 +2,9 @@
     "name": "mon-projet",
     "version": "1.0.0",
     "dependencies": {
-      "next": "13.0.0",
-      "react": "18.0.0",
-      "react-dom": "18.0.0"
+      "next": "^13.0.0",  // Vérifie que la version de Next.js est présente ici
+      "react": "^18.0.0",  // Assure-toi que React est là aussi
+      "react-dom": "^18.0.0"
     },
     "scripts": {
       "dev": "next dev",
